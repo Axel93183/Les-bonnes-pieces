@@ -47,64 +47,77 @@ const boutonTrier = document.querySelector(".btn-trier");
 
 const piecesOrdonnees = Array.from(pieces);//créer une copie de la liste "pieces". Cela permet de ne pas toucher à l'ordre de la liste "pieces" pour que les autre tris et filtres de la page fonctionnent correctement
 boutonTrier.addEventListener("click", function () {
-    piecesOrdonnees.sort(function (a,b) {
+    piecesOrdonnees.sort(function (a, b) {
         return a.prix - b.prix;
     });
     console.log(piecesOrdonnees);
 });
 
-/****************************************************************************************************************************************
- * 
- * La fonction "sort" prend en argument une nouvelle fonction. Nous déclarons celle-ci à l’intérieur des parenthèses de "sort", sans lui donner de nom. On dit qu’elle est anonyme. Cette fonction anonyme sera appelée par "sort" pour comparer deux éléments entre eux.
- * 
- * la fonction anonyme prend deux paramètres qu’il faudra comparer pour dire lequel doit être rangé avant l’autre dans la liste réordonnée finale. Traditionnellement, on nomme ces deux paramètres A et B.
- * 
- * La fonction "sort" s’attend à recevoir un nombre de la part de la fonction anonyme. Le signe de ce nombre (positif, négatif ou nul) sert à indiquer dans quel ordre ranger les deux éléments :
-    * si le nombre est positif, alors B sera rangé avant A ;
-    * si le nombre est négatif, alors A sera rangé avant B ;
-    * si le nombre est zéro (0), alors l’ordre sera inchangé. 
- *
- * La fonction "sort" modifie la liste qu’elle réordonne “en place” (in-place, en anglais). Cela veut dire que les éléments de la liste changent de place. Cela pose un problème car la liste d’origine avec l’ordre d’origine est aussi modifiée. Pour résoudre ce problème, nous pouvons créer une copie de la liste avec la fonction Array.from
- *
-****************************************************************************************************************************************/
-
 const boutonFiltrer = document.querySelector(".btn-filtrer");
 // Ajoute un écouteur d'événements pour le clic sur le bouton "boutonFiltrer"
 boutonFiltrer.addEventListener("click", function () {
-   // Crée un nouveau tableau "piecesFiltrees" en filtrant les éléments du tableau "pieces"
-   // Le filtre est basé sur la condition que le prix de chaque "piece" soit inférieur ou égal à 35
-   const piecesFiltrees = pieces.filter(function (piece) {
-       return piece.prix <= 35;
-   });
-   // Affiche le tableau résultant après le filtrage dans la console
-   console.log(piecesFiltrees);
+    // Crée un nouveau tableau "piecesFiltrees" en filtrant les éléments du tableau "pieces"
+    // Le filtre est basé sur la condition que le prix de chaque "piece" soit inférieur ou égal à 35
+    const piecesFiltrees = pieces.filter(function (piece) {
+        return piece.prix <= 35;
+    });
+    // Affiche le tableau résultant après le filtrage dans la console
+    console.log(piecesFiltrees);
 });
- /**
-  * 
-  * La fonction filter prend en argument une fonction anonyme qui sera appelée une fois par élément de la liste. 
-  * La fonction anonyme prend un paramètre : l’élément à tester, ici on l'appellera "piece". 
-  * Elle doit retourner une valeur booléenne selon la validité de la condition du "return":
-        * true si l’élément doit se trouver dans la liste filtrée ;
-        * false si l’élément ne doit pas se trouver dans la liste filtrée.
-  * 
-  * Le nouveau tableau appelé piecesFiltrees est créé à partir du tableau existant pieces, en appliquant un filtre basé sur le prix de chaque "piece". Seules les pièces avec un prix inférieur ou égal à 35 "piece.prix <= 35" seront incluses dans ce nouveau tableau.
-  * 
-  * 
- **/
 
- const boutonFiltreDescription = document.querySelector(".btn-filtrer-description");
- boutonFiltreDescription.addEventListener("click", function() {
-    const piecesAvecDescription = pieces.filter(function(piece) {
+const boutonFiltreDescription = document.querySelector(".btn-filtrer-description");
+boutonFiltreDescription.addEventListener("click", function () {
+    const piecesAvecDescription = pieces.filter(function (piece) {
         return piece.description;
     });
     console.log(piecesAvecDescription);
- })
+})
 
- const boutonTriDecroissant = document.querySelector(".btn-trier-decroissant")
-boutonTriDecroissant.addEventListener("click", ()=>{
-    piecesOrdonnees.sort((a,b)=>{
+const boutonTriDecroissant = document.querySelector(".btn-trier-decroissant")
+boutonTriDecroissant.addEventListener("click", () => {
+    piecesOrdonnees.sort((a, b) => {
         return b.prix - a.prix;
     });
     console.log(piecesOrdonnees);
 
 })
+
+const noms = pieces.map(piece => piece.nom);
+for (let i = pieces.length - 1; i >= 0; i--) {
+    if (pieces[i].prix > 35) {
+        noms.splice(i, 1)
+    }
+}
+//console.log(noms)
+
+//Création de la liste
+const abordablesElements = document.createElement('ul');
+//Ajout de chaque nom à la liste
+for (let i = 0; i < noms.length; i++) {
+    const nomElement = document.createElement('li');
+    nomElement.innerText = noms[i];
+    abordablesElements.appendChild(nomElement)
+}
+
+// Ajout de l'en-tête puis de la liste au bloc résultats filtres
+document.querySelector('.abordables').appendChild(abordablesElements)
+
+const nomsDispo = pieces.map(piece => piece.nom);
+const prixDispo = pieces.map(piece => piece.prix);
+
+for (let i = pieces.length - 1; i >= 0; i--) {
+    if (!pieces[i].disponibilite) {
+        nomsDispo.splice(i, 1);
+        prixDispo.splice(i, 1);
+    }
+}
+
+const disponiblesElement = document.createElement("ul");
+
+for (let i = 0; i < nomsDispo.length; i++) {
+    const nomElement = document.createElement('li');
+    nomElement.innerText = `${nomsDispo[i]} - ${prixDispo[i]} €`;
+    disponiblesElement.appendChild(nomElement)
+}
+
+document.querySelector('.disponibles').appendChild(disponiblesElement)
