@@ -1,7 +1,11 @@
 import { ajoutListenersAvis } from "./avis.js";
 
+// Récupération des pièces depuis l'API
+const reponse = await fetch(`http://localhost:8081/pieces`);
+const pieces = await reponse.json();
+
 // Récupération des pièces depuis le fichier JSON
-const pieces = await fetch("pieces-autos.json").then(pieces => pieces.json());
+//const pieces = await fetch("pieces-autos.json").then(pieces => pieces.json());
 
 /******************************************************************************************************************/
 /************************************AUTRE SYNTAXE DE RÉCUPÉRATION*************************************************/
@@ -180,7 +184,12 @@ inputRange.addEventListener("input", () => {
     prixMaxValue.textContent = `Prix maximum : ${inputRange.value} €`; // Mise à jour du texte avec la valeur sélectionnée
 
     // Filtrer les pièces en fonction de la valeur de l'input range
-    const piecesFiltrees = pieces.filter(piece => piece.prix <= prixMax);
+    const piecesFiltrees = pieces.filter(piece => piece.prix <= inputRange.value) 
+    //console.log(piecesFiltrees);
+
+    // const piecesFiltrees = pieces.filter(function(piece){
+    //     return piece.prix <= inputRange.value;
+    // });
 
     // Générer les fiches des pièces filtrées
     document.querySelector(".fiches").innerHTML = "";
