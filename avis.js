@@ -44,39 +44,44 @@ export function ajoutListenersAvis() {
     }
 }
 
-
-
+export function ajoutListenerEnvoyerAvis() {
+    const formulaireAvis = document.querySelector(".formulaire-avis");
+    formulaireAvis.addEventListener("submit", function (event) {
+        // Désactivation du comportement par défaut du navigateur
+        event.preventDefault();
+        // Création de l’objet du nouvel avis.
+        const avis = {
+            pieceId: parseInt(event.target.querySelector("[name=piece-id]").value),
+            utilisateur: event.target.querySelector("[name=utilisateur").value,
+            commentaire: event.target.querySelector("[name=commentaire]").value,
+            nbEtoiles: parseInt(event.target.querySelector("[name=nb-etoiles]").value),
+        };
+        // Création de la charge utile au format JSON
+        const chargeUtile = JSON.stringify(avis);
+        // Appel de la fonction fetch avec toutes les informations nécessaires
+        fetch("http://localhost:8081/avis", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: chargeUtile
+        });
+    });
+}
 /**
  * 
- * Les API en ligne sont utilisées pour persister vos données, c’est-à-dire les stocker durablement :
+ * Personnalisez votre requête avec le deuxième argument de fetch:
  * 
- * Les services web permettent de stocker durablement les données grâce à leur API en ligne.
- * 
- * Un navigateur web utilise le protocole HTTP pour envoyer des requêtes à destination du serveur, via sa barre de navigation.
- * 
- * Pour que le serveur identifie le type de requête envoyé, vous devez utiliser des verbes HTTP (POST, GET, PUT, DELETE).
- * 
- * En JavaScript, la fonction "fetch" est utilisée pour envoyer des requêtes au service web :
- * 
- * Les requêtes permettent de manipuler les données.
- * 
- * Elle utilise le verbe HTTP GET par défaut.
- * 
-*/
+ *  fetch("chemin de la ressource", {  Objet de configuration  });
 
-/**
+ * Configurez l’objet du deuxième argument en renseignant trois propriétés :
  * 
- * Le serveur peut traiter différents types de requêtes.
- * Les quatre types les plus courants sont : la création, la récupération, la modification et la suppression.
- * Pour que le serveur identifie quel type de requête il doit traiter, nous devons utiliser les verbes HTTP ci-dessous :
+ * method pour le verbe HTTP ;
+ * body pour la charge utile ;
+ * headers pour les en-têtes.
  * 
- * POST pour la création ;
- * GET pour la récupération ;
- * PUT pour la modification ;
- * DELETE pour la suppression.
+ * Pour créer une nouvelle ressource avec une API HTTP qui accepte le format JSON, vous devez utiliser :
  * 
-**/
-
-/**L’attribut data-id que nous avons utilisé sur la balise button n’est pas spécifique aux identifiants.
- * En réalité, nous pouvons créer n’importe quelle balise data-xxx et récupérer sa valeur en JavaScript avec dataset.xxx.
- **/
+ * le verbe POST ;
+ * un body au format JSON ;
+ * un en-tête Content-Type application/json.
+ * 
+ */
